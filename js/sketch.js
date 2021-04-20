@@ -1,27 +1,27 @@
 class Sketch extends Engine {
   setup() {
     // parameters
-    this._max_life = 1200;
-    this._words = ["MIRRORS", "ECHOES", "WAVES"];
+    this._max_life = 1000; // equals the number of travelled pixels
+    this._words = ["MIRRORS", "ECHOES", "WAVES", "MEMENTOS"];
     this._waves_number = this._words.length * 4;
     this._show_fps = false;
     this._recording = false;
     // sketch setup
-    this._ended = false;
+    this._duration = this._max_life;
     this._replaced = 0;
-    console.clear();
-    this._capturer_started = false;
-    this._capturer = new CCapture({
-      framerate: 60,
-      verbose: true,
-      motionBlurFrames: true,
-      format: "png",
-    });
     this._word_count = 0;
     this._waves = [];
+
+    console.clear();
+    // setup capturer
+    if (this._recording) {
+      this._capturer = new CCapture({ format: "png" });
+      this._capturer_started = false;
+    }
+    // init waves
     for (let i = 0; i < this._waves_number; i++) {
       const new_wave = new Wave(this._words[this._word_count], this._max_life, this._width, this._height);
-      new_wave.age((1 - i / this._waves_number) * this._max_life);
+      new_wave.age((1 - i / this._waves_number) * this._max_life - 1);
       this._waves.push(new_wave);
       // update the current word counter
       this._word_count = (this._word_count + 1) % this._words.length;
@@ -32,9 +32,10 @@ class Sketch extends Engine {
     if (!this._capturer_started && this._recording) {
       this._capturer_started = true;
       this._capturer.start();
+      console.log("%c Recording started", "color: green; font-size: 2rem");
     }
 
-    this.background("#000");
+    this.background("0");
     // draw and updates waves
     this._waves.forEach(w => {
       w.show(this._ctx);
@@ -65,11 +66,13 @@ class Sketch extends Engine {
     }
 
     if (this._recording) {
-      if (!this._ended) this._capturer.capture(this._canvas);
-      else {
+      if (this._frameCount <= this._duration) {
+        this._capturer.capture(this._canvas);
+      } else {
         this._recording = false;
         this._capturer.stop();
         this._capturer.save();
+        console.log("%c Recording ended", "color: red; font-size: 2rem");
       }
     }
   }
@@ -85,7 +88,7 @@ class Wave {
     this._span = Math.PI / 4; // curve radius
     this._radius = 10; // curve radius
     this._particles_num = this._word.length * 2;
-    this._particle_max_size = 75; // max text size 
+    this._particle_max_size = 60; // max text size 
 
     this._particles = [];
     const d_theta = this._vel.heading();
@@ -135,7 +138,9 @@ class Wave {
 
   age(life) {
     // set particle age
-    this._particles.forEach(p => p.age(life));
+    for (let i = 0; i < life; i++) {
+      this.move();
+    }
   }
 
   get alive() {
