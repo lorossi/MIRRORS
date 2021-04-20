@@ -1,11 +1,5 @@
-# Empty HTML5 Canvas Project
+# MIRRORS
 
-I got bored of creating a new document every time.
+Reflections, mirrors, sounds
 
-Contains all the needed files to create a new HTML5 page with a JS canvas inside.
-
-Just clone the repo or download the last release.
-
-## Credits
-
-This project is distributed under Attribution 4.0 International (CC BY 4.0) license.
+FFmpeg command used: `ffmpeg -y -r 60 -i %07d.png -c:a aac -b:a 256k -ar 44100 -c:v libx264 -pix_fmt yuv420p -r 60 video_h264.mp4`
