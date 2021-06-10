@@ -5,7 +5,7 @@ class Sketch extends Engine {
     this._words = ["MIRRORS", "ECHOES", "WAVES", "MEMENTOS"];
     this._waves_number = this._words.length * 4;
     this._show_fps = false;
-    this._recording = false;
+    this._recording = true;
     // sketch setup
     this._duration = this._max_life;
     this._replaced = 0;
@@ -66,7 +66,7 @@ class Sketch extends Engine {
     }
 
     if (this._recording) {
-      if (this._frameCount <= this._duration) {
+      if (this._frameCount < this._duration) {
         this._capturer.capture(this._canvas);
       } else {
         this._recording = false;
@@ -102,8 +102,8 @@ class Wave {
     for (let theta = start_theta; theta < end_theta; theta += theta_increment) {
       const px = this._pos.x + this._radius * Math.cos(theta + d_theta);
       const py = this._pos.y + this._radius * Math.sin(theta + d_theta);
-      const pvel = this._vel.copy().rotate(theta);
-      this._particles.push(new Particle(px, py, pvel, this._word[count], this._particle_max_size, this._max_life, width, height));
+      const vel = this._vel.copy().rotate(theta);
+      this._particles.push(new Particle(px, py, vel, this._word[count], this._particle_max_size, this._max_life, width, height));
 
       count = (count + 1) % this._word.length;
     }
