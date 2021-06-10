@@ -4,7 +4,7 @@ Reflections, mirrors, sounds. Without sounds, of course, because that's a gif. O
 
 But come on, it looks good at least.
 
-View this animation in action on my [Instagram profile](https://www.instagram.com/lorossi97)
+View this animation in action on my [Instagram profile](https://www.instagram.com/p/CP83Sjtszz1/)
 
 ## Details
 
